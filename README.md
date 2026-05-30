@@ -64,12 +64,9 @@ python app.py
 3. Vercel utilizzerà il file `vercel.json` per eseguire l'app con il builder `@vercel/python`.
 
 ## Link pubblici
-- Repository GitHub: (inserisci qui il link al repo)
-- Sito pubblicato su Vercel: (inserisci qui il link al sito)
+- Repository GitHub: https://github.com/sertorio2223/anime-manga-catalog
+- Sito pubblicato su Vercel: (in aggiornamento...)
 
----
-
-Se vuoi, posso:
-- Aggiungere immagini di prova (URL diretti) a qualche record;
-- Tentare di creare il repository GitHub e fare il push (servono le tue credenziali o il `gh` CLI già autenticato);
-- Tentare il deploy automatico via `vercel` CLI (richiede login su Vercel).
+## Prossimi passi
+1. Connetti il repository GitHub a Vercel per il deploy automatico
+2. Vercel genererà un link pubblico per il sito
