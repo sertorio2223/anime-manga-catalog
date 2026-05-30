@@ -1,36 +1,55 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import os
+import logging
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Logging per debug
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def init_database():
     """Inizializza il database se non esiste"""
-    if not os.path.exists(Config.DATABASE):
-        conn = sqlite3.connect(Config.DATABASE)
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS anime_manga (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                titolo TEXT NOT NULL,
-                tipo TEXT NOT NULL,
-                genere TEXT,
-                anno INTEGER,
-                trama TEXT,
-                rating REAL,
-                immagine_url TEXT,
-                num_stagioni INTEGER DEFAULT 1,
-                episodi_per_stagione TEXT,
-                data_aggiunta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-        conn.commit()
-        conn.close()
+    try:
+        db_path = Config.DATABASE
+        logger.info(f"Database path: {db_path}")
+        
+        if not os.path.exists(db_path):
+            logger.info(f"Creating database at {db_path}")
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS anime_manga (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    titolo TEXT NOT NULL,
+                    tipo TEXT NOT NULL,
+                    genere TEXT,
+                    anno INTEGER,
+                    trama TEXT,
+                    rating REAL,
+                    immagine_url TEXT,
+                    num_stagioni INTEGER DEFAULT 1,
+                    episodi_per_stagione TEXT,
+                    data_aggiunta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            conn.commit()
+            conn.close()
+            logger.info("Database created successfully")
+        else:
+            logger.info("Database already exists")
+    except Exception as e:
+        logger.error(f"Error initializing database: {e}")
+        raise
 
 # Inizializza il database all'avvio
-init_database()
+try:
+    init_database()
+except Exception as e:
+    logger.error(f"Failed to initialize database: {e}")
 
 def get_db_connection():
     """Connette al database SQLite"""
