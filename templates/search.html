@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Ricerca - Catalogo Anime & Manga{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🔍 Risultati Ricerca</h1>
+    <p>Stai cercando: <strong>"{{ query }}"</strong></p>
+</div>
+
+{% if items %}
+    <p class="search-info">📊 Trovati <strong>{{ items|length }}</strong> risultato/i</p>
+    <div class="grid">
+        {% for item in items %}
+            <div class="card">
+                {% if item['immagine_url'] %}
+                    <img src="{{ item['immagine_url'] }}" alt="{{ item['titolo'] }}" class="card-img">
+                {% else %}
+                    <div class="placeholder">📷 No Image</div>
+                {% endif %}
+                
+                <div class="card-content">
+                    <h3>{{ item['titolo'] }}</h3>
+                    <p><strong>Tipo:</strong> <span class="badge">{{ item['tipo'] }}</span></p>
+                    <p><strong>Genere:</strong> {{ item['genere'] or 'N/A' }}</p>
+                    <p><strong>Anno:</strong> {{ item['anno'] or 'N/A' }}</p>
+                    {% if item['rating'] %}
+                        <p><strong>Rating:</strong> <span class="rating">⭐ {{ item['rating'] }}/10</span></p>
+                    {% endif %}
+                    {% if item['num_stagioni'] %}
+                        <p><strong>Stagioni:</strong> {{ item['num_stagioni'] }}</p>
+                    {% endif %}
+                    {% if item['episodi_per_stagione'] %}
+                        <p><strong>Episodi:</strong> {{ item['episodi_per_stagione'] }}</p>
+                    {% endif %}
+                    
+                    <!-- Pulsanti Modifica e Elimina -->
+                    <div class="card-actions">
+                        <a href="{{ url_for('edit', item_id=item['id']) }}" class="btn-edit">✏️ Modifica</a>
+                        <form method="post" action="{{ url_for('delete', item_id=item['id']) }}" class="delete-form">
+                            <button type="submit" class="btn-delete" onclick="return confirm('⚠️ Sei sicuro? Questo elemento non potrà essere recuperato!');">🗑️ Elimina</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>❌ Nessun risultato</h2>
+        <p>La ricerca per "<strong>{{ query }}</strong>" non ha prodotto risultati.</p>
+        <p>Prova con altre parole chiave!</p>
+        <a href="{{ url_for('index') }}" class="btn-primary">← Torna al catalogo</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Catalogo Anime & Manga{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📚 Catalogo Completo</h1>
+    <p>Scopri la nostra collezione di anime e manga</p>
+</div>
+
+{% if items %}
+    <div class="grid">
+        {% for item in items %}
+            <div class="card">
+                {% if item['immagine_url'] %}
+                    <img src="{{ item['immagine_url'] }}" alt="{{ item['titolo'] }}" class="card-img">
+                {% else %}
+                    <div class="placeholder">📷 No Image</div>
+                {% endif %}
+                
+                <div class="card-content">
+                    <h3>{{ item['titolo'] }}</h3>
+                    <p><strong>Tipo:</strong> <span class="badge">{{ item['tipo'] }}</span></p>
+                    <p><strong>Genere:</strong> {{ item['genere'] or 'N/A' }}</p>
+                    <p><strong>Anno:</strong> {{ item['anno'] or 'N/A' }}</p>
+                    {% if item['rating'] %}
+                        <p><strong>Rating:</strong> <span class="rating">⭐ {{ item['rating'] }}/10</span></p>
+                    {% endif %}
+                    {% if item['num_stagioni'] %}
+                        <p><strong>Stagioni:</strong> {{ item['num_stagioni'] }}</p>
+                    {% endif %}
+                    {% if item['episodi_per_stagione'] %}
+                        <p><strong>Episodi:</strong> {{ item['episodi_per_stagione'] }}</p>
+                    {% endif %}
+                    {% if item['trama'] %}
+                        <p class="trama"><strong>Trama:</strong> {{ item['trama'][:100] }}...</p>
+                    {% endif %}
+                    
+                    <!-- Pulsanti Modifica e Elimina -->
+                    <div class="card-actions">
+                        <a href="{{ url_for('edit', item_id=item['id']) }}" class="btn-edit">✏️ Modifica</a>
+                        <form method="post" action="{{ url_for('delete', item_id=item['id']) }}" class="delete-form">
+                            <button type="submit" class="btn-delete" onclick="return confirm('⚠️ Sei sicuro? Questo elemento non potrà essere recuperato!');">🗑️ Elimina</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>📭 Catalogo vuoto</h2>
+        <p>Non ci sono ancora anime o manga nel catalogo.</p>
+        <a href="{{ url_for('add') }}" class="btn-primary">Aggiungi il primo elemento!</a>
+    </div>
+{% endif %}
+{% endblock %}

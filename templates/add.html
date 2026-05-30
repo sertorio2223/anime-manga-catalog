@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Aggiungi Nuovo - Catalogo Anime & Manga{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>➕ Aggiungi Nuovo Anime/Manga</h1>
+    <p>Compila il form per aggiungere una nuova opera</p>
+</div>
+
+<div class="form-container">
+    <form method="post" class="form">
+        <div class="form-group">
+            <label for="titolo">Titolo *</label>
+            <input type="text" id="titolo" name="titolo" placeholder="es. Attack on Titan" required>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo">Tipo *</label>
+            <select id="tipo" name="tipo" required>
+                <option value="">-- Seleziona --</option>
+                <option value="Anime">Anime</option>
+                <option value="Manga">Manga</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="genere">Genere</label>
+            <input type="text" id="genere" name="genere" placeholder="es. Azione, Fantasy, Avventura">
+        </div>
+
+        <div class="form-group">
+            <label for="anno">Anno</label>
+            <input type="number" id="anno" name="anno" placeholder="es. 2023" min="1900" max="2099">
+        </div>
+
+        <div class="form-group">
+            <label for="trama">Trama</label>
+            <textarea id="trama" name="trama" rows="5" placeholder="Descrivi la trama dell'opera..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="rating">Rating (1-10)</label>
+            <input type="number" id="rating" name="rating" min="1" max="10" step="0.5" placeholder="es. 8.5">
+        </div>
+
+        <div class="form-group">
+            <label for="immagine_url">URL Immagine (Copertina)</label>
+            <input type="url" id="immagine_url" name="immagine_url" placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="form-group">
+            <label for="num_stagioni">Numero di Stagioni</label>
+            <input type="number" id="num_stagioni" name="num_stagioni" min="1" placeholder="es. 4">
+        </div>
+
+        <div class="form-group">
+            <label for="episodi_per_stagione">Episodi per Stagione</label>
+            <input type="text" id="episodi_per_stagione" name="episodi_per_stagione" placeholder="es. S1: 24ep, S2: 24ep, S3: 25ep">
+            <small style="color: #94a3b8; margin-top: 0.25rem; display: block;">Formato: S1: Nep, S2: Nep, etc.</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">✅ Salva</button>
+            <a href="{{ url_for('index') }}" class="btn-cancel">❌ Annulla</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

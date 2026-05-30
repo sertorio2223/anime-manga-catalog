@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Catalogo Anime & Manga{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">🎬 Anime & Manga</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">📚 Home</a></li>
+                <li><a href="{{ url_for('add') }}">➕ Aggiungi</a></li>
+            </ul>
+            <!-- BARRA RICERCA -->
+            <form action="{{ url_for('search') }}" method="get" class="search-form">
+                <input type="text" name="q" placeholder="Cerca anime/manga..." required>
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- CONTENUTO -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Anime & Manga Catalog | Progetto Scolastico Flask + SQLite</p>
+    </footer>
+</body>
+</html>
