@@ -36,9 +36,29 @@ def init_database():
                     data_aggiunta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
+            
+            # Inserisci dati di sample
+            samples = [
+                ('Fullmetal Alchemist: Brotherhood', 'Anime', 'Azione, Avventura, Drammatico', 2009, 
+                 'Due fratelli usano l\'alchimia nella speranza di recuperare i loro corpi dopo un esperimento fallito.', 9.1, '', 1, 'S1: 64ep'),
+                ('Naruto', 'Manga', 'Azione, Avventura', 1999, 
+                 'La storia di Naruto Uzumaki, un giovane ninja che aspira a diventare Hokage.', 8.0, '', 5, 'S1: 220, S2: 500'),
+                ('One Piece', 'Manga', 'Azione, Avventura, Fantasy', 1997, 
+                 'Monkey D. Luffy e la sua ciurma cercano il tesoro leggendario "One Piece".', 8.9, '', 20, 'S1: 61, S2: 33, ...'),
+                ('Demon Slayer: Kimetsu no Yaiba', 'Anime', 'Azione, Fantasy, Drammatico', 2019, 
+                 'Un ragazzo diventa un cacciatore di demoni per salvare sua sorella e vendicare la sua famiglia.', 8.7, '', 3, 'S1: 26, S2: 18, S3: 11')
+            ]
+            
+            for sample in samples:
+                cursor.execute('''
+                    INSERT INTO anime_manga 
+                    (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', sample)
+            
             conn.commit()
             conn.close()
-            logger.info("Database created successfully")
+            logger.info("Database created successfully with sample data")
         else:
             logger.info("Database already exists")
     except Exception as e:
