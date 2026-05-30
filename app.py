@@ -1,9 +1,36 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+import os
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+def init_database():
+    """Inizializza il database se non esiste"""
+    if not os.path.exists(Config.DATABASE):
+        conn = sqlite3.connect(Config.DATABASE)
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS anime_manga (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                titolo TEXT NOT NULL,
+                tipo TEXT NOT NULL,
+                genere TEXT,
+                anno INTEGER,
+                trama TEXT,
+                rating REAL,
+                immagine_url TEXT,
+                num_stagioni INTEGER DEFAULT 1,
+                episodi_per_stagione TEXT,
+                data_aggiunta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        conn.commit()
+        conn.close()
+
+# Inizializza il database all'avvio
+init_database()
 
 def get_db_connection():
     """Connette al database SQLite"""
