@@ -67,6 +67,3 @@ python app.py
 - Repository GitHub: https://github.com/sertorio2223/anime-manga-catalog
 - Sito pubblicato su Vercel: (in aggiornamento...)
 
-## Prossimi passi
-1. Connetti il repository GitHub a Vercel per il deploy automatico
-2. Vercel genererà un link pubblico per il sito
