@@ -27,11 +27,20 @@
                     {% if item['rating'] %}
                         <p><strong>Rating:</strong> <span class="rating">⭐ {{ item['rating'] }}/10</span></p>
                     {% endif %}
-                    {% if item['num_stagioni'] %}
-                        <p><strong>Stagioni:</strong> {{ item['num_stagioni'] }}</p>
-                    {% endif %}
-                    {% if item['episodi_per_stagione'] %}
-                        <p><strong>Episodi:</strong> {{ item['episodi_per_stagione'] }}</p>
+                    {% if item['tipo'] == 'Anime' %}
+                        {% if item['num_stagioni'] %}
+                            <p><strong>Stagioni:</strong> {{ item['num_stagioni'] }}</p>
+                        {% endif %}
+                        {% if item['episodi_per_stagione'] %}
+                            <p><strong>Episodi:</strong> {{ item['episodi_per_stagione'] }}</p>
+                        {% endif %}
+                    {% elif item['tipo'] == 'Manga' %}
+                        {% if item['num_capitoli'] %}
+                            <p><strong>Capitoli:</strong> {{ item['num_capitoli'] }}</p>
+                        {% endif %}
+                        {% if item['pagine_per_capitolo'] %}
+                            <p><strong>Pagine per Capitolo:</strong> {{ item['pagine_per_capitolo'] }}</p>
+                        {% endif %}
                     {% endif %}
                     
                     <!-- Pulsanti Modifica e Elimina -->

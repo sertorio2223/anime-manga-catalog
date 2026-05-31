@@ -33,6 +33,8 @@ def init_database():
                     immagine_url TEXT,
                     num_stagioni INTEGER DEFAULT 1,
                     episodi_per_stagione TEXT,
+                    num_capitoli INTEGER,
+                    pagine_per_capitolo TEXT,
                     data_aggiunta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
@@ -40,20 +42,20 @@ def init_database():
             # Inserisci dati di sample
             samples = [
                 ('Fullmetal Alchemist: Brotherhood', 'Anime', 'Azione, Avventura, Drammatico', 2009, 
-                 'Due fratelli usano l\'alchimia nella speranza di recuperare i loro corpi dopo un esperimento fallito.', 9.1, '', 1, 'S1: 64ep'),
+                 'Due fratelli usano l\'alchimia nella speranza di recuperare i loro corpi dopo un esperimento fallito.', 9.1, '', 1, 'S1: 64ep', None, None),
                 ('Naruto', 'Manga', 'Azione, Avventura', 1999, 
-                 'La storia di Naruto Uzumaki, un giovane ninja che aspira a diventare Hokage.', 8.0, '', 5, 'S1: 220, S2: 500'),
+                 'La storia di Naruto Uzumaki, un giovane ninja che aspira a diventare Hokage.', 8.0, '', None, None, 700, '~45 pagine'),
                 ('One Piece', 'Manga', 'Azione, Avventura, Fantasy', 1997, 
-                 'Monkey D. Luffy e la sua ciurma cercano il tesoro leggendario "One Piece".', 8.9, '', 20, 'S1: 61, S2: 33, ...'),
+                 'Monkey D. Luffy e la sua ciurma cercano il tesoro leggendario "One Piece".', 8.9, '', None, None, 1000, '~40 pagine'),
                 ('Demon Slayer: Kimetsu no Yaiba', 'Anime', 'Azione, Fantasy, Drammatico', 2019, 
-                 'Un ragazzo diventa un cacciatore di demoni per salvare sua sorella e vendicare la sua famiglia.', 8.7, '', 3, 'S1: 26, S2: 18, S3: 11')
+                 'Un ragazzo diventa un cacciatore di demoni per salvare sua sorella e vendicare la sua famiglia.', 8.7, '', 3, 'S1: 26, S2: 18, S3: 11', None, None)
             ]
             
             for sample in samples:
                 cursor.execute('''
                     INSERT INTO anime_manga 
-                    (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione, num_capitoli, pagine_per_capitolo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ''', sample)
             
             conn.commit()
@@ -98,15 +100,25 @@ def add():
         trama = request.form.get('trama', '')
         rating = request.form.get('rating', '')
         immagine_url = request.form.get('immagine_url', '')
-        num_stagioni = request.form.get('num_stagioni', '')
-        episodi_per_stagione = request.form.get('episodi_per_stagione', '')
+        
+        # Gestisci campi diversi per Anime vs Manga
+        if tipo == 'Anime':
+            num_stagioni = request.form.get('num_stagioni', '')
+            episodi_per_stagione = request.form.get('episodi_per_stagione', '')
+            num_capitoli = None
+            pagine_per_capitolo = None
+        else:  # Manga
+            num_stagioni = None
+            episodi_per_stagione = None
+            num_capitoli = request.form.get('num_capitoli', '')
+            pagine_per_capitolo = request.form.get('pagine_per_capitolo', '')
         
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO anime_manga (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione))
+            INSERT INTO anime_manga (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione, num_capitoli, pagine_per_capitolo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione, num_capitoli, pagine_per_capitolo))
         conn.commit()
         conn.close()
         
@@ -149,14 +161,24 @@ def edit(item_id):
         trama = request.form.get('trama', '')
         rating = request.form.get('rating', '')
         immagine_url = request.form.get('immagine_url', '')
-        num_stagioni = request.form.get('num_stagioni', '')
-        episodi_per_stagione = request.form.get('episodi_per_stagione', '')
+        
+        # Gestisci campi diversi per Anime vs Manga
+        if tipo == 'Anime':
+            num_stagioni = request.form.get('num_stagioni', '')
+            episodi_per_stagione = request.form.get('episodi_per_stagione', '')
+            num_capitoli = None
+            pagine_per_capitolo = None
+        else:  # Manga
+            num_stagioni = None
+            episodi_per_stagione = None
+            num_capitoli = request.form.get('num_capitoli', '')
+            pagine_per_capitolo = request.form.get('pagine_per_capitolo', '')
         
         cursor.execute('''
             UPDATE anime_manga 
-            SET titolo = ?, tipo = ?, genere = ?, anno = ?, trama = ?, rating = ?, immagine_url = ?, num_stagioni = ?, episodi_per_stagione = ?
+            SET titolo = ?, tipo = ?, genere = ?, anno = ?, trama = ?, rating = ?, immagine_url = ?, num_stagioni = ?, episodi_per_stagione = ?, num_capitoli = ?, pagine_per_capitolo = ?
             WHERE id = ?
-        ''', (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione, item_id))
+        ''', (titolo, tipo, genere, anno, trama, rating, immagine_url, num_stagioni, episodi_per_stagione, num_capitoli, pagine_per_capitolo, item_id))
         conn.commit()
         conn.close()
         

@@ -17,6 +17,10 @@ def init_database():
             trama TEXT,
             rating REAL,
             immagine_url TEXT,
+            num_stagioni INTEGER DEFAULT 1,
+            episodi_per_stagione TEXT,
+            num_capitoli INTEGER,
+            pagine_per_capitolo TEXT,
             data_aggiunta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')

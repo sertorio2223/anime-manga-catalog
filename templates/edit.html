@@ -48,15 +48,27 @@
             <input type="url" id="immagine_url" name="immagine_url" placeholder="https://example.com/image.jpg" value="{{ item['immagine_url'] or '' }}">
         </div>
 
-        <div class="form-group">
+        <div class="form-group anime-section" {% if item['tipo'] != 'Anime' %}style="display: none;"{% endif %}>
             <label for="num_stagioni">Numero di Stagioni</label>
             <input type="number" id="num_stagioni" name="num_stagioni" min="1" placeholder="es. 4" value="{{ item['num_stagioni'] or '' }}">
         </div>
 
-        <div class="form-group">
+        <div class="form-group anime-section" {% if item['tipo'] != 'Anime' %}style="display: none;"{% endif %}>
             <label for="episodi_per_stagione">Episodi per Stagione</label>
             <input type="text" id="episodi_per_stagione" name="episodi_per_stagione" placeholder="es. S1: 24ep, S2: 24ep, S3: 25ep" value="{{ item['episodi_per_stagione'] or '' }}">
             <small style="color: #94a3b8; margin-top: 0.25rem; display: block;">Formato: S1: Nep, S2: Nep, etc.</small>
+        </div>
+
+        <!-- Sezione Manga (Capitoli e Pagine) -->
+        <div class="form-group manga-section" {% if item['tipo'] != 'Manga' %}style="display: none;"{% endif %}>
+            <label for="num_capitoli">Numero di Capitoli</label>
+            <input type="number" id="num_capitoli" name="num_capitoli" min="1" placeholder="es. 50" value="{{ item['num_capitoli'] or '' }}">
+        </div>
+
+        <div class="form-group manga-section" {% if item['tipo'] != 'Manga' %}style="display: none;"{% endif %}>
+            <label for="pagine_per_capitolo">Pagine per Capitolo (media)</label>
+            <input type="text" id="pagine_per_capitolo" name="pagine_per_capitolo" placeholder="es. ~40 pagine" value="{{ item['pagine_per_capitolo'] or '' }}">
+            <small style="color: #94a3b8; margin-top: 0.25rem; display: block;">Inserisci la media di pagine per capitolo</small>
         </div>
 
         <div class="form-actions">
@@ -65,4 +77,27 @@
         </div>
     </form>
 </div>
+
+<script>
+    // Mostra/nascondi campi in base al tipo selezionato
+    function toggleFormFields() {
+        const tipo = document.getElementById('tipo').value;
+        const animeSections = document.querySelectorAll('.anime-section');
+        const mangaSections = document.querySelectorAll('.manga-section');
+        
+        if (tipo === 'Anime') {
+            animeSections.forEach(section => section.style.display = 'block');
+            mangaSections.forEach(section => section.style.display = 'none');
+        } else if (tipo === 'Manga') {
+            animeSections.forEach(section => section.style.display = 'none');
+            mangaSections.forEach(section => section.style.display = 'block');
+        } else {
+            animeSections.forEach(section => section.style.display = 'none');
+            mangaSections.forEach(section => section.style.display = 'none');
+        }
+    }
+    
+    // Aggiungi listener al select del tipo
+    document.getElementById('tipo').addEventListener('change', toggleFormFields);
+</script>
 {% endblock %}
